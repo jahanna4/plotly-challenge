@@ -2,7 +2,7 @@
 // otulabels = [];
 // sampvals = [];
 
-d3.json("static/js/samples.json").then(function(rawdata) {
+d3.json("data/samples.json").then(function(rawdata) {
     var data = rawdata;
     var meta = data.metadata;
     var samples = data.samples;
