@@ -97,13 +97,9 @@ d3.json("data/samples.json").then(function(rawdata) {
            var otuids = [];
            var otulabels = [];
            var sampvals = [];
-           var id = [];
-           var ethnicity = [];
-           var gender = [];
-           var age = [];
-           var loc = [];
-           var bbtype = [];
-           var wfreq = [];
+           var otuslice = [];
+           var labelslice = [];
+           var sampslice = [];
 
            var id = [];
            var ethnicity = [];
