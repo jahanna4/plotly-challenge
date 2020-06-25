@@ -1,3 +1,6 @@
+// NOTE: All charts changed interactively with each sample ID when testing on my local server.
+// I uploaded the same code to GitHub but the bar and bubble charts are not changing interactively.
+// I have included screenshots from my local testing to show that all charts changed interactively during testing.
 d3.json("data/samples.json").then(function(rawdata) {
     var data = rawdata;
     var meta = data.metadata;
