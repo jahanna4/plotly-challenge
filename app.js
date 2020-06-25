@@ -4,38 +4,38 @@ d3.json("data/samples.json").then(function(rawdata) {
     var samples = data.samples;
     var names = data.names;
 
-    // dataselect = d3.select("#selDataset");
-    // dataselect.append("ul");
-    // dataselect.select("ul").selectAll("li").data(names).enter().append("li").text(names);
+    var otuids=samples[0].otu_ids;
+    var otuslice=otuids.slice(0,10);
+//    console.log(otuslice);
+    var otulabels=samples[0].otu_labels;
+    var labelslice=otulabels.slice(0,10);
 
-    // var otuids = [];
-    // var otulabels = [];
-    // var sampvals = [];
+    var sampvals=samples[0].sample_values;
+    var sampslice=sampvals.slice(0,10);
 
-    // for(var i = 0; i<samples.length; i++) {
-        // for(var x = 0; x<samples[i].otu_ids; i++) {
-        //     console.log(samples[3].otu_ids[1]);
-        // }
-       var otuids=samples[1].otu_ids;
-       var otuslice=otuids.slice(0,10);
-    //    console.log(otuslice);
-       var otulabels=samples[1].otu_labels;
-       var labelslice=otulabels.slice(0,10);
-
-       var sampvals=samples[1].sample_values;
-       var sampslice=sampvals.slice(0,10);
-
-       var id = meta[1].id;
-       var ethnicity = meta[1].ethnicity;
-       var gender = meta[1].gender;
-       var age = meta[1].age;
-       var loc = (meta[1].location).replace("/",",");
-       var bbtype = meta[1].bbtype;
-       var wfreq = meta[1].wfreq;
-    //    var demdata = [id, ethnicity, gender, age, loc, bbtype, wfreq];
+    var id = meta[0].id;
+    var ethnicity = meta[0].ethnicity;
+    var gender = meta[0].gender;
+    var age = meta[0].age;
+    var loc = (meta[0].location).replace("/",",");
+    var bbtype = meta[0].bbtype;
+    var wfreq = meta[0].wfreq;
+    var demdata = [(id, ethnicity, gender, age, loc, bbtype, wfreq)];
     //    console.log(demdata);
 
        function init(){
+        function initmeta() {
+            d3.select("ul")
+            .selectAll("li")
+            .data(demdata)
+            .enter()
+            .append("li")
+            .html(function(d) {
+                return `<li>ID: ${id}</li><li>Ethnicity: ${ethnicity}</li><li>Gender: ${gender}</li><li>Age: ${age}</li><li>Location (city, state):${loc}</li><li>BB Type: ${bbtype}</li><li>Wfreq: ${wfreq}</li>`
+            });
+        }
+        initmeta();
+
         function initbar() {
             var barData = [ {
                 x: otuslice,
@@ -90,6 +90,7 @@ d3.json("data/samples.json").then(function(rawdata) {
        d3.selectAll("#selDataset").on("change", optionChanged);
 
        function optionChanged() {
+           d3.event.preventDefault();
            var menu = d3.select("#selDataset");
            var selval = menu.property("value");
 
@@ -103,6 +104,15 @@ d3.json("data/samples.json").then(function(rawdata) {
            var loc = [];
            var bbtype = [];
            var wfreq = [];
+
+           var id = [];
+           var ethnicity = [];
+           var gender = [];
+           var age = [];
+           var loc = [];
+           var bbtype = [];
+           var wfreq = [];
+           var demdata = [];
 
            for(var i = 0; i<names.length; i++) {
                if (selval === names[i]) {
@@ -122,56 +132,30 @@ d3.json("data/samples.json").then(function(rawdata) {
                 loc = (meta[i].location).replace("/",",");
                 bbtype = meta[i].bbtype;
                 wfreq = meta[i].wfreq;
+                demdata = [(id, ethnicity, gender, age, loc, bbtype, wfreq)];
                }
            }
         updates();
 
         function updates() {
+
             Plotly.restyle("bar", "x", otuslice, "y", sampslice, "text", labelslice);
             Plotly.restyle("bubble", "x", otuslice, "y", sampslice, "size", sampslice, "color", otuslice, "text", labelslice);
             Plotly.restyle("gauge", "value", wfreq);
+
+            function newmeta() {
+                d3.select("ul").selectAll("li").remove();
+
+                d3.select("ul")
+                .selectAll("li")
+                .data(demdata)
+                .enter()
+                .append("li")
+                .html(function(d) {
+                    return `<li>ID: ${id}</li><li>Ethnicity: ${ethnicity}</li><li>Gender: ${gender}</li><li>Age: ${age}</li><li>Location (city, state):${loc}</li><li>BB Type: ${bbtype}</li><li>Wfreq: ${wfreq}</li>`
+                });
+            }
+            newmeta();
         }
-
-
-    //    };
-    //    x: otuslice,
-    //    y: sampslice,
-    //    mode: 'markers',
-    //    marker: {
-    //        size: sampslice,
-    //        color: otuslice
-    //    },
-    //    text: labelslice
-
-        // FIX THIS
-    // function initmeta() {
-    //     // dataselect = d3.select("#selDataset");
-    //     // dataselect.append("ul");
-    //     // dataselect.select("ul").selectAll("li").data(names).enter().append("li").text(names);
-    // //     // var metadisp = d3.select(".panel-body");
-    // //     // metadisp.append("ul");
-    // // //    metadisp.select("ul")
-
-    //     d3.select("ul")
-    //     .data(meta)
-    //     .enter()
-    //     .append("li")
-    //     .html(function(meta) {
-    //         return `<li>${id}</li><li>${ethnicity}</li><li>${gender}</li><li>${age}</li><li>${loc}</li><li>${bbtype}</li><li>${wfreq}</li>`;
-    //     });
-    // };
-    // initmeta();
-
-
-        // console.log(loc);
-        // var metadisp = d3.select("#metadata");
-        // meta.forEach((meta) => {
-        //     var newrow = metadisp.append("ul");
-        //     Object.entries(meta).forEach(([key,value]) => {
-        //         var newcell = newrow.append("li");
-        //         newcell.text(value);
-        //     });
-        // });
-    // }
     }
 });
