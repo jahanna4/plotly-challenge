@@ -57,14 +57,14 @@ d3.json("data/samples.json").then(function(rawdata) {
     
         function initbubble() {
             var bubbleData = [ {
-                x: otuslice,
-                y: sampslice,
+                x: otulabels,
+                y: sampvals,
                 mode: 'markers',
                 marker: {
-                    size: sampslice,
-                    color: otuslice
+                    size: sampvals,
+                    color: otuids
                 },
-                text: labelslice
+                text: otulabels
             }
             ];
             var bubbleLayout = {
@@ -154,14 +154,14 @@ d3.json("data/samples.json").then(function(rawdata) {
             Plotly.newPlot("bar", newbarData, barLayout);
 
             var newbubbleData = [ {
-                x: otuslice,
-                y: sampslice,
+                x: otulabels,
+                y: sampvals,
                 mode: 'markers',
                 marker: {
-                    size: sampslice,
-                    color: otuslice
+                    size: sampvals,
+                    color: otuids
                 },
-                text: labelslice
+                text: otulabels
             }
             ];
             var bubbleLayout = {
