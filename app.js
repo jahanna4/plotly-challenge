@@ -138,24 +138,67 @@ d3.json("data/samples.json").then(function(rawdata) {
         updates();
 
         function updates() {
+            Plotly.purge("bar");
+            Plotly.purge("bubble");
 
-            Plotly.restyle("bar", "x", otuslice, "y", sampslice, "text", labelslice);
-            Plotly.restyle("bubble", "x", otuslice, "y", sampslice, "size", sampslice, "color", otuslice, "text", labelslice);
+            var newbarData = [ {
+                x: otuslice,
+                y: sampslice,
+                type: "bar",
+                text: labelslice,
+                orientation: "h"
+            }
+            ];
+            var barLayout = {
+                title: "Top OTU's",
+            };
+            Plotly.newPlot("bar", newbarData, barLayout);
+
+            var newbubbleData = [ {
+                x: otuslice,
+                y: sampslice,
+                mode: 'markers',
+                marker: {
+                    size: sampslice,
+                    color: otuslice
+                },
+                text: labelslice
+            }
+            ];
+            var bubbleLayout = {
+                xtitle: "OTU ID"
+            };
+            Plotly.newPlot("bubble", newbubbleData, bubbleLayout);
+
+// Note: Added the purge & regenerate for gauge in case there are any issues with the code during grading but gauge restyled during testing without purge & recreate.
+            // Plotly.purge("gauge");
+            // var newgaugedata = [ {
+            //     domain: {x:[0,9], y:[0,9]},
+            //     value: wfreq,
+            //     title: {text: "Belly Button Washing Frequency"},
+            //     type: "indicator",
+            //     mode: "gauge+number"
+            // }
+            // ];
+            // var gaugelayout = {width: 450, height: 500};
+            // Plotly.newPlot("gauge", newgaugedata, gaugelayout);
+
             Plotly.restyle("gauge", "value", wfreq);
 
-            function newmeta() {
-                d3.select("ul").selectAll("li").remove();
-
-                d3.select("ul")
-                .selectAll("li")
-                .data(demdata)
-                .enter()
-                .append("li")
-                .html(function(d) {
-                    return `<li>ID: ${id}</li><li>Ethnicity: ${ethnicity}</li><li>Gender: ${gender}</li><li>Age: ${age}</li><li>Location (city, state):${loc}</li><li>BB Type: ${bbtype}</li><li>Wfreq: ${wfreq}</li>`
-                });
-            }
             newmeta();
+        }
+
+        function newmeta() {
+            d3.select("ul").selectAll("li").remove();
+
+            d3.select("ul")
+            .selectAll("li")
+            .data(demdata)
+            .enter()
+            .append("li")
+            .html(function(d) {
+                return `<li>ID: ${id}</li><li>Ethnicity: ${ethnicity}</li><li>Gender: ${gender}</li><li>Age: ${age}</li><li>Location (city, state):${loc}</li><li>BB Type: ${bbtype}</li><li>Wfreq: ${wfreq}</li>`
+            });
         }
     }
 });
